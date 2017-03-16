@@ -1,0 +1,1420 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+% or ...
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+\end_preamble
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 2
+\use_esint 0
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+A Tutorial on Hybrid Finite Element Formulation
+\begin_inset OptArg
+status open
+
+\begin_layout Plain Layout
+Hybrid Element
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subtitle
+Assumed Stress-Displacement Field 
+\end_layout
+
+\begin_layout Author
+M.
+ Meenakshi Sundaram
+\begin_inset Flex InstituteMark
+status open
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset OptArg
+status open
+
+\begin_layout Plain Layout
+Meenakshi
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Institute
+\begin_inset Flex InstituteMark
+status open
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+
+M2D2 Lab, Department of Mechanical Engineering
+\begin_inset Newline newline
+\end_inset
+
+Indian Institute of Science
+\begin_inset OptArg
+status open
+
+\begin_layout Plain Layout
+$M^2D^2$,IISc
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+Sept 22 nd 2010
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+If you have a file called "institution-logo-filename.xxx", where xxx is a
+ graphic format that can be processed by latex or pdflatex, resp., then you
+ can add a logo by uncommenting the following:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+pgfdeclareimage[height=0.5cm]{institution-logo}{institution-logo-filename}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+logo{
+\backslash
+pgfuseimage{institution-logo}}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+If you wish to uncover everything in a step-wise fashion, uncomment the
+ following command:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Outline
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conventional FEM
+\end_layout
+
+\begin_layout BeginFrame
+Conventional Formulation for FEM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{v}.\left(\nabla.\mathbf{\tau}+\mathbf{b}\right)d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\left(\bar{\mathbf{t}}-\mathbf{t}\right)d\Gamma=\mathbf{0}\,\,\,\forall\mathbf{v}\in V_{u}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Omega$
+\end_inset
+
+ - domain 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Gamma$
+\end_inset
+
+ - boundary.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Gamma_{t}$
+\end_inset
+
+ - traction specified boundary.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{v}$
+\end_inset
+
+ - variation of the displacement.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\begin_inset Formula $\mathbf{t}$
+\end_inset
+
+
+\series default
+ - tractions on the boundary
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\bar{\mathbf{t}}$
+\end_inset
+
+ - specified tractions
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\tau}$
+\end_inset
+
+ - stress tensor 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\tau}=\mathbf{C}:\mathbf{\epsilon}(\mathbf{u})$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{C}$
+\end_inset
+
+ fourth order constitutive tensor.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\epsilon}(\mathbf{u})$
+\end_inset
+
+ linear strain tensor 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\frac{1}{2}\left(\nabla\mathbf{u}+\nabla\mathbf{u}^{T}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+ Displacements 
+\end_layout
+
+\end_deeper
+\begin_layout BeginFrame
+Conventional Formulation for FEM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{v}.\left(\nabla.\mathbf{\tau}+\mathbf{b}\right)d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\left(\mathbf{t}-\bar{\mathbf{t}}\right)d\Gamma=\mathbf{0}\,\,\,\forall\mathbf{v}\in V_{u}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Find 
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+ for all possible 
+\begin_inset Formula $\mathbf{v}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Use the identity 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{v}.\left(\nabla.\mathbf{\tau}\right)=\nabla.\left(\mathbf{\tau}\mathbf{v}\right)-\mathbf{\tau}:\frac{1}{2}\left(\nabla\mathbf{v}+\nabla\mathbf{v}^{T}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\frac{1}{2}\left(\nabla\mathbf{v}+\nabla\mathbf{v}^{T}\right)$
+\end_inset
+
+ denoted by 
+\begin_inset Formula $\mathbf{\epsilon}\left(\mathbf{v}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Used symmetry of 
+\begin_inset Formula $\mathbf{\tau}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Use Divergence theorem
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+cancel out the term 
+\begin_inset Formula $\int_{\Gamma_{t}}\mathbf{v}.\mathbf{t}d\Gamma$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+This results in
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{v}.\mathbf{b}d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\bar{\mathbf{t}}d\Gamma=\int_{\Omega}\mathbf{\epsilon}\mathbf{\left(v\right)}:\mathbf{\tau}d\Omega\,\,\,\forall\mathbf{v}\in V_{u}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Conventional Formulation for FEM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{v}.\mathbf{b}d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\bar{\mathbf{t}}d\Gamma=\int_{\Omega}\mathbf{\epsilon}\mathbf{\left(v\right)}:\mathbf{\tau}d\Omega\,\,\,\forall\mathbf{v}\in V_{u}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\tau}$
+\end_inset
+
+ is replaced by 
+\begin_inset Formula $\mathbf{C}:\mathbf{\epsilon}(\mathbf{u})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{v}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+ are interpolated
+\end_layout
+
+\begin_layout Section
+Hybrid Formulation
+\end_layout
+
+\begin_layout BeginFrame
+Hybrid Formulation for FEM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{multline*}
+\int_{\Omega}\mathbf{v}.\left(\nabla.\mathbf{\tau}+\mathbf{b}\right)d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\left(\mathbf{t}-\bar{\mathbf{t}}\right)d\Gamma+\int_{\Omega}\mathbf{\sigma}:\left(\mathbf{\epsilon}\left(\mathbf{u}\right)-\mathbf{C}^{-1}:\mathbf{\tau}\right)d\Omega=\mathbf{0}\\
+\forall\left(\mathbf{v},\mathbf{\mathbf{\sigma}}\right)\in\left(V_{u}\times V_{\tau}\right)\end{multline*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\sigma}$
+\end_inset
+
+ Variation of the stress field.
+\end_layout
+
+\begin_layout Itemize
+Results in two sets of equations
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+set variation in each to zero
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{\epsilon}\mathbf{\left(v\right)}:\mathbf{\tau}d\Omega=\int_{\Omega}\mathbf{v}.\mathbf{b}d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\bar{\mathbf{t}}d\Gamma\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{\sigma}:\left(\mathbf{\epsilon}\left(\mathbf{u}\right)-\mathbf{C}^{-1}:\mathbf{\tau}\right)d\Omega=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Hybrid Formulation for FEM
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{\epsilon}\mathbf{\left(v\right)}:\mathbf{\tau}d\Omega=\int_{\Omega}\mathbf{v}.\mathbf{b}d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\bar{\mathbf{t}}d\Gamma\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{\sigma}:\left(\mathbf{\epsilon}\left(\mathbf{u}\right)-\mathbf{C}^{-1}:\mathbf{\tau}\right)d\Omega=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{v}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+ interpolated
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\sigma}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{\tau}$
+\end_inset
+
+ interpolated
+\end_layout
+
+\begin_layout Section
+Getting the matrix equations
+\end_layout
+
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{u}=N\mathbf{\hat{u}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{v}=N\mathbf{\hat{v}}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\hat{u}}\ and\ \mathbf{\hat{v}}$
+\end_inset
+
+ are nodal displacements and its variations.
+\end_layout
+
+\begin_layout Itemize
+viewed as constants helping to describe the displacement field within.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\mathbf{\tau}}=P\mathbf{\hat{\mathbf{\beta}}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{\mathbf{\sigma}}=P\mathbf{\hat{\mathbf{\gamma}}}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\hat{\mathbf{\beta}}}\ and\ \mathbf{\hat{\gamma}}$
+\end_inset
+
+ are constants in an element that help in description of the stress field
+ within.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+This results in 
+\begin_inset Formula $\mathbf{\epsilon}\left(\mathbf{u}\right)=B\hat{\mathbf{u}}$
+\end_inset
+
+ and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\mathbf{\epsilon}\left(\mathbf{v}\right)=B\hat{\mathbf{v}}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $B$
+\end_inset
+
+ is the strain-displacement matrix 
+\end_layout
+
+\end_deeper
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{\epsilon}\mathbf{\left(v\right)}:\mathbf{\tau}d\Omega=\int_{\Omega}\mathbf{v}.\mathbf{b}d\Omega+\int_{\Gamma_{t}}\mathbf{v}.\bar{\mathbf{t}}d\Gamma\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\int_{\Omega}\mathbf{\sigma}:\left(\mathbf{\epsilon}\left(\mathbf{u}\right)-\mathbf{C}^{-1}:\mathbf{\tau}\right)d\Omega=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\mathbf{\hat{v}}^{T}\left(\int_{\Omega}B^{T}Pd\Omega\right)\hat{\mathbf{\beta}}=\mathbf{\hat{v}}^{T}\left(\int_{\Omega}N^{T}\mathbf{b}d\Omega\right)+\mathbf{\hat{v}}^{T}\left(\int_{\Gamma_{t}}N^{t}\bar{\mathbf{t}}d\Gamma\right)\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\hat{\gamma}^{T}\int_{\Omega}P^{T}\left(B\mathbf{\hat{u}}-\mathbf{C}^{-1}P\hat{\mathbf{\beta}}\right)d\Omega=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\mathbf{\hat{v}}^{T}\left(\int_{\Omega}B^{T}Pd\Omega\right)\hat{\mathbf{\beta}}=\mathbf{\hat{v}}^{T}\left(\int_{\Omega}N^{T}\mathbf{b}d\Omega\right)+\mathbf{\hat{v}}^{T}\left(\int_{\Gamma_{t}}N^{t}\bar{\mathbf{t}}d\Gamma\right)\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\hat{\gamma}^{T}\left(\int_{\Omega}P^{T}Bd\Omega\right)\mathbf{\hat{u}}-\hat{\gamma}^{T}\left(\int_{\Omega}P^{T}\mathbf{C}^{-1}Pd\Omega\right)\hat{\mathbf{\beta}}=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Itemize
+Eliminating the Variations we get
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\overset{G^{T}}{\overbrace{\left(\int_{\Omega}B^{T}Pd\Omega\right)}}\hat{\mathbf{\beta}}=\overset{\hat{f}}{\overbrace{\left(\int_{\Omega}N^{T}\mathbf{b}d\Omega\right)+\left(\int_{\Gamma_{t}}N^{t}\bar{\mathbf{t}}d\Gamma\right)}}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\overset{G}{\overbrace{\left(\int_{\Omega}P^{T}Bd\Omega\right)}}\mathbf{\hat{u}}-\overset{H}{\overbrace{\left(\int_{\Omega}P^{T}\mathbf{C}^{-1}Pd\Omega\right)}}\hat{\mathbf{\beta}}=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Itemize
+The Matrix equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+G^{T}\hat{\mathbf{\beta}}=\hat{f}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+G\mathbf{\hat{u}}-H\hat{\mathbf{\beta}}=0\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Getting the matrix equations
+\end_layout
+
+\begin_layout Itemize
+Condensing out the 
+\begin_inset Formula $\hat{\mathbf{\beta}}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\left(G^{T}H^{-1}G\right)\hat{\mathbf{u}}=\hat{f}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Can be split across elements
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\sum_{e}\left(G_{e}^{T}H_{e}^{-1}G_{e}\right)\hat{\mathbf{u_{e}}}=\hat{f_{e}}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+So every element stiffness matrix formulation needs a matrix inversion.
+\end_layout
+
+\begin_layout Section
+The Stress Field Matrices
+\end_layout
+
+\begin_layout BeginFrame
+Obtaining the `
+\begin_inset Formula $P$
+\end_inset
+
+' Matrix
+\end_layout
+
+\begin_layout Itemize
+Governed by the stress shape functions.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Defined in local co-ordinate system of the element.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Transformed to global coordinate system 
+\end_layout
+
+\begin_layout Itemize
+At every point inside the element 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathbf{\tau}=J^{T}\mathbf{\tau}_{loc}J$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $J$
+\end_inset
+
+ Jacobian matrix
+\end_layout
+
+\begin_layout Itemize
+Linear in 
+\begin_inset Formula $\mathbf{\tau}_{loc}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For vectorized 
+\begin_inset Formula $\mathbf{\tau}$
+\end_inset
+
+ one can get a Transformation matrix 
+\begin_inset Formula $T$
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+size
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\begin_inset Formula $6\times6$
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+in 3D
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $P_{loc}$
+\end_inset
+
+ These are of size 
+\begin_inset Formula $6\times num\ \beta s$
+\end_inset
+
+ in 3D
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $P=T\times P_{loc}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+`
+\begin_inset Formula $P$
+\end_inset
+
+' Matrix an example
+\end_layout
+
+\begin_layout Itemize
+In local coords for a 4 node quad
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\left[\begin{array}{c}
+\tau_{xx}\\
+\tau_{yy}\\
+\tau_{xy}\end{array}\right]=\left[\begin{array}{c}
+\beta_{1}+\beta_{2}y\\
+\beta_{3}+\beta_{4}x\\
+\beta_{5}\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\left[\begin{array}{c}
+\tau_{xx}\\
+\tau_{yy}\\
+\tau_{xy}\end{array}\right]=\underset{P_{loc}}{\underbrace{\left[\begin{array}{ccccc}
+1 & y & 0 & 0 & 0\\
+0 & 0 & 1 & x & 0\\
+0 & 0 & 0 & 0 & 1\end{array}\right]}}\left[\begin{array}{c}
+\beta_{1}\\
+\beta_{2}\\
+\beta_{3}\\
+\beta_{4}\\
+\beta_{5}\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Transformation matrix
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\left[\begin{array}{ccc}
+J_{11}^{2} & J_{21}^{2} & 2J_{11}J_{21}\\
+J_{12}^{2} & J_{22}^{2} & 2J_{12}J_{22}\\
+J_{11}J_{12} & J_{21}J_{22} & J_{11}J_{22}+J_{12}J_{21}\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout BeginFrame
+`
+\begin_inset Formula $P$
+\end_inset
+
+' Matrix an example
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $P=\left[\begin{array}{ccc}
+J_{11}^{2} & J_{21}^{2} & 2J_{11}J_{21}\\
+J_{12}^{2} & J_{22}^{2} & 2J_{12}J_{22}\\
+J_{11}J_{12} & J_{21}J_{22} & J_{11}J_{22}+J_{12}J_{21}\end{array}\right]\left[\begin{array}{ccccc}
+1 & y & 0 & 0 & 0\\
+0 & 0 & 1 & x & 0\\
+0 & 0 & 0 & 0 & 1\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Stress Shape Functions the rule of the thumb
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tau_{xx}$
+\end_inset
+
+- differentiation of the displacement field 
+\begin_inset Formula $u_{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tau_{yy}$
+\end_inset
+
+- differentiation of the displacement field 
+\begin_inset Formula $u_{y}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tau_{zz}$
+\end_inset
+
+- differentiation of the displacement field 
+\begin_inset Formula $u_{z}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tau_{xy}$
+\end_inset
+
+- intersection of 
+\begin_inset Formula $\tau_{xx}$
+\end_inset
+
+and 
+\begin_inset Formula $\tau_{yy}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tau_{xz}$
+\end_inset
+
+- intersection of 
+\begin_inset Formula $\tau_{xx}$
+\end_inset
+
+and 
+\begin_inset Formula $\tau_{zz}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tau_{yz}$
+\end_inset
+
+- intersection of 
+\begin_inset Formula $\tau_{yy}$
+\end_inset
+
+and 
+\begin_inset Formula $\tau_{zz}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Element Stiffness Matrix - Pseudo Code
+\end_layout
+
+\begin_layout BeginFrame
+Pseudo - Code
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+For every gauss point:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\size small
+displacement shape functions (disp)
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+displacement derivatives (derdisp)
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $P_{local}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+Jacobian 
+\begin_inset Formula $J$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $J^{-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $Det(J)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $T$
+\end_inset
+
+ - using 
+\begin_inset Formula $J$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $B$
+\end_inset
+
+ - using 
+\begin_inset Formula $J^{-1}$
+\end_inset
+
+derdisp
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $P$
+\end_inset
+
+ - 
+\begin_inset Formula $T\times P_{local}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $G=G+P^{T}\times B\times Det(J)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $H=H+P^{T}\times C\times P\times Det(J)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+
+\size small
+end for
+\end_layout
+
+\begin_layout LyX-Code
+
+\size small
+\begin_inset Formula $KE=G^{T}H^{-1}G$
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}{Thank You}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+\start_of_appendix
+Appendix
+\end_layout
+
+\begin_layout Subsection*
+For Further Reading
+\end_layout
+
+\begin_layout BeginFrame
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[allowframebreaks]
+\end_layout
+
+\end_inset
+
+For Further Reading
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+beamertemplatearticlebibitems
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "C.S. Jog2007"
+
+\end_inset
+
+C.S.
+ Jog.
+ A 27-node hybrid brick and a 21-node hybrid wedge element for structural
+ analysis, 2007
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document
